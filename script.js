@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     showCover: true,
     usePortrait: true,
     mobileScrollSupport: true,
-    swipeDistance: 20,
+    swipeDistance: 50, // Increased threshold to avoid accidental flip triggers
     clickEventForward: true,
     flippingTime: 650,
     useMouseEvents: true
@@ -39,6 +39,15 @@ document.addEventListener('DOMContentLoaded', function () {
   pageFlip.on('flip', updateIndicator);
   updateIndicator();
 
+  // Prevent scroll & touch drag events inside page text from triggering StPageFlip
+  document.querySelectorAll('.page-body').forEach(el => {
+    ['wheel', 'touchstart', 'touchmove', 'pointerdown', 'pointermove'].forEach(eventType => {
+      el.addEventListener(eventType, function (e) {
+        e.stopPropagation();
+      }, { passive: true });
+    });
+  });
+
   function goNext() { pageFlip.flipNext(); }
   function goPrev() { pageFlip.flipPrev(); }
 
@@ -52,7 +61,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (e.key === 'ArrowLeft') goPrev();
   });
 
-  // Re-check size on orientation change / resize so the book re-fits
   let resizeTimer;
   window.addEventListener('resize', function () {
     clearTimeout(resizeTimer);
