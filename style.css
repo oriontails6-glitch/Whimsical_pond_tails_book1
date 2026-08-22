@@ -307,7 +307,22 @@ body {
   text-align: center;
   font-size: 13px;
 }
+/* Ensure page content receives scroll gestures without triggering flipbook drag */
+.page-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-right: 4px;
+  font-size: clamp(12px, 2.6vw, 14px);
+  line-height: 1.55;
+  touch-action: pan-y;
+  overscroll-behavior-y: contain;
+}
 
+/* Prevent flipbook swipe detection when scrolling inside the reader body */
+.page-body, .page-content {
+  pointer-events: auto;
+}
 .footnote {
   position: relative;
   z-index: 1;
