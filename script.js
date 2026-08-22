@@ -3,18 +3,20 @@ document.addEventListener('DOMContentLoaded', function () {
   const pages = document.querySelectorAll('.page');
 
   const pageFlip = new St.PageFlip(bookEl, {
-    width: 800,
-    height: 620,
+    width: 500,
+    height: 680,
     size: 'stretch',
-    minWidth: 300,
-    maxWidth: 900,
-    minHeight: 260,
-    maxHeight: 700,
+    minWidth: 280,
+    maxWidth: 1000,
+    minHeight: 380,
+    maxHeight: 1000,
     maxShadowOpacity: 0.5,
     showCover: true,
     usePortrait: true,
-    mobileScrollSupport: false,
-    flippingTime: 700,
+    mobileScrollSupport: true,
+    swipeDistance: 20,
+    clickEventForward: true,
+    flippingTime: 650,
     useMouseEvents: true
   });
 
@@ -48,5 +50,14 @@ document.addEventListener('DOMContentLoaded', function () {
   document.addEventListener('keydown', function (e) {
     if (e.key === 'ArrowRight') goNext();
     if (e.key === 'ArrowLeft') goPrev();
+  });
+
+  // Re-check size on orientation change / resize so the book re-fits
+  let resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+      pageFlip.updateFromHTML(pages);
+    }, 200);
   });
 });
